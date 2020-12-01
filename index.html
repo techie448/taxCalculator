@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tax Calculator</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" type="image/png" href="/favicon.png"/>
+</head>
+<body class="body-light">
+<span class="icon">
+<!--    <a href="https://documenter.getpostman.com/view/11755556/TVCY5rNb" class="api">API Documentation</a>-->
+<a href="https://github.com/techie448/tax-calculator" class="github"></a>
+</span>
+<main id="app">
+<div class="widget">
+  <div class="widget-top-section">
+    <h1>TAX CALCULATOR</h1>
+    <p class="subtitle-timer alpha">Calculate personal taxes in Ontario</p>
+  </div>
+  <div class="timer">
+    <div class="timer-tick">
+      <div class="timer-digits">
+          <form @submit.prevent="calculateTax()">
+              <input type="number" placeholder="Enter Pay Amount" name="pay" id="pay" v-model="pay" required autofocus
+                     minlength="1">
+              <select name="duration" id="duration" v-model="duration" required>
+                  <option value="hour">Hour</option>
+                  <option value="day">Day</option>
+                  <option value="week">Week</option>
+                  <option selected value="biweek">Bi-Weekly</option>
+                  <option value="month">Month</option>
+                  <option value="year">Year</option>
+              </select>
+              <input type="submit" value="Calculate Taxes" id="submit">
+          </form>
+          <div id="result">
+              <template v-if="loading">
+                  <div class="loader">
+                      <p>LOADING</p>
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                  </div>
+              </template>
+              <template v-else>
+          <div id="countdown-wrap" v-if="result">
+              <div id="goal">${{result.total}}</div>
+              <div id="glass">
+
+                  <div id="federal" v-if="result.federal" v-bind:style="{ width: ((result.federal.replace(',',''))/result.pay*100).toFixed(0) + '%' }"></div>
+                  <div id="provincial" v-if="result.provincial" v-bind:style="{ width: ((result.provincial.replace(',',''))/result.pay*100).toFixed(2) + '%' }"></div>
+                  <div id="cpp" v-if="result.cpp" v-bind:style="{ width: ((result.cpp.replace(',',''))/result.pay*100).toFixed(0) + '%' }"></div>
+                  <div id="ei" v-if="result.ei" v-bind:style="{ width: ((result.ei.replace(',',''))/result.pay*100).toFixed(0) + '%' }"></div>
+              </div>
+        <div class="timer-digit-group" v-if="result.federal">
+          <p class="timer-unit alpha federal">FEDERAL</p>
+          <div class="timer-digit">-${{result.federal}}</div>
+        </div>
+          <div class="timer-digit-group" v-if="result.provincial">
+              <p class="timer-unit alpha provincial">PROVINCIAL</p>
+              <div class="timer-digit">-${{result.provincial}}</div>
+          </div>
+          <div class="timer-digit-group" v-if="result.cpp">
+              <p class="timer-unit alpha cpp">CPP</p>
+              <div class="timer-digit">-${{result.cpp}}</div>
+          </div>
+          <div class="timer-digit-group" v-if="result.ei">
+              <p class="timer-unit alpha ei">EI</p>
+              <div class="timer-digit">-${{result.ei}}</div>
+          </div>
+          </div>
+              </template>
+      </div>
+    </div>
+  </div>
+</div>
+            <h2 v-else class="error">{{error}}</h2>
+        </template>
+    </div>
+</main>
+<script src="https://unpkg.com/vue@2.6.11/dist/vue.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
