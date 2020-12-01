@@ -3,8 +3,13 @@ const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
 const getData = (document, row) => {
-    const res = document.querySelector(`#deduction_${row}`).textContent.trim().split(" ")[1];
-    return (!!res) ? res : undefined
+    let res = undefined;
+    try{
+    res = document.querySelector(`#deduction_${row}`).textContent.trim().split(" ")[1];
+    }catch(err){
+        console.log(err);
+    }
+    return res;
 }
 
 module.exports  = async (req, res) => {
